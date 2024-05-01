@@ -19,7 +19,7 @@ import { IncidentModule } from './Incidents-Managment/InfraStructure/incident.mo
       password: '123456789',
       database: 'idbi',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true, 
+      synchronize: false, 
       logging:true, 
     }),    
     UserModule, 
