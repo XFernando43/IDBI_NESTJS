@@ -5,15 +5,15 @@ import { User } from "./user.entity";
 export class UserType {
 
     @PrimaryGeneratedColumn()
-    TypeId:number;
+    typeId:number;
 
     @Column()
-    Name:string;
+    name:string;
 
     @Column()
-    Description:string;
+    description:string;
 
-    @OneToMany(() => User, user => user.userType)
+    @OneToMany(() => User, (user)=> user.userType)
     users: User[];
     
 

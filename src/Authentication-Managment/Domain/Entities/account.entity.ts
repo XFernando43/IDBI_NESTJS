@@ -4,14 +4,13 @@ import { User } from "./user.entity";
 @Entity("Accounts")
 export class Account {
     @PrimaryGeneratedColumn()
-    AccountId:number;
+    accountId:number;
 
     @Column()
-    Email:string;
+    email:string;
 
     @Column()
-    Password:string;
-
+    password:string;
 
     @OneToOne(()=> User)
     @JoinColumn({name:'UserId'})

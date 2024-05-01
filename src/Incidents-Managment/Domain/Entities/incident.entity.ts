@@ -8,11 +8,11 @@ import { TypeProblem } from "../Enums/TypeProblem.enum";
 export class Incident {
 
     @PrimaryGeneratedColumn()
-    IncidentId:Number;
+    incidentId:Number;
 
-    @ManyToOne(()=> User, user=>user.Incident)
+    @ManyToOne(()=> User, user=>user.incident)
     @JoinColumn({name:'userId'})
-    User:User;
+    user:User;
     
     @Column()
     subject:string;
@@ -37,7 +37,7 @@ export class Incident {
 
 
     //////////
-    @OneToMany(()=> Comment, Comment=>Comment.Incident)
+    @OneToMany(()=> Comment, Comment=>Comment.incident)
     comments: Comment[];
    
 }

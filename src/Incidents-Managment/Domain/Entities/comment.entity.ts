@@ -5,19 +5,19 @@ import { Incident } from "./incident.entity";
 @Entity("Comments")
 export class Comment {
     @PrimaryGeneratedColumn()
-    CommentId:number;
+    commentId:number;
     
     @ManyToOne(()=> Incident, incident => incident.comments)
     @JoinColumn({name:"incidentID"})
-    Incident:Incident;
+    incident:Incident;
 
     @ManyToOne(() => User, user => user.comments)
     @JoinColumn({name:"userId"})
-    User: User;
+    user: User;
 
     @Column()
-    Content:string;
+    content:string;
 
     @JoinColumn()
-    CreatedAt: Date;
+    createdAt: Date;
 }

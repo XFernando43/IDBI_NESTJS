@@ -6,14 +6,15 @@ import { JoinAttribute } from "typeorm/query-builder/JoinAttribute";
 
 @Entity("Users")
 export class User {
+
     @PrimaryGeneratedColumn()
-    UserId:number;
+    userId:number;
     @Column()
-    Name:string;
+    name:string;
     @Column()
-    LastName:string;
+    lastName:string;
     @Column()
-    Phone:string;
+    phone:string;
     @ManyToOne(() => UserType, userType => userType.users)
     @JoinColumn({name:"TypeId"})
     userType: UserType;
@@ -21,10 +22,10 @@ export class User {
 
 
     ////////////////////
-    @OneToMany(() => Comment, comment => comment.User)
+    @OneToMany(() => Comment, comment => comment.user)
     comments: Comment[]   
 
-    @OneToMany(()=> Incident, incident=>incident.User)
-    Incident:Incident;
+    @OneToMany(()=> Incident, incident=>incident.user)
+    incident:Incident;
    
 }

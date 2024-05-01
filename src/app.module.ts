@@ -7,6 +7,7 @@ import { UserTypesModule } from './Authentication-Managment/Infracstruture/user-
 import { UserModule } from './Authentication-Managment/Infracstruture/user.module';
 import { CommentsModule } from './Incidents-Managment/InfraStructure/comments.module';
 import { IncidentModule } from './Incidents-Managment/InfraStructure/incident.module';
+import { TestModule } from './test/test.module';
 
 
 @Module({
@@ -27,6 +28,7 @@ import { IncidentModule } from './Incidents-Managment/InfraStructure/incident.mo
     UserTypesModule,
     CommentsModule,
     IncidentModule,
+    TestModule,
   ],
 
   controllers: [AppController],

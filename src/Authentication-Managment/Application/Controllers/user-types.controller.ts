@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UserTypesService } from '../Services/user-types.service';
 import { CreateUserTypeDto } from '../../Domain/Dto/create-user-type.dto';
 import { UpdateUserTypeDto } from '../../Domain/Dto/update-user-type.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags()
 @Controller('user-types')
 export class UserTypesController {
   constructor(private readonly userTypesService: UserTypesService) {}
