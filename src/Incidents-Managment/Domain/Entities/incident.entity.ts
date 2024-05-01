@@ -7,6 +7,17 @@ import { TypeProblem } from "../Enums/TypeProblem.enum";
 @Entity("Incident")
 export class Incident {
 
+    constructor(user:User, subject:string, imageUrl:string, type:string,details:string,status:string, createAt:Date, updated:Date){
+        this.user = user;
+        this.subject = subject;
+        this.imageUrl = imageUrl;
+        this.type=type;
+        this.details=details;
+        this.status=status;
+        this.createAt = createAt;
+        this.updateAt = updated;
+    }
+
     @PrimaryGeneratedColumn()
     incidentId:Number;
 
@@ -21,13 +32,13 @@ export class Incident {
     imageUrl:string;
     
     @Column()
-    type: TypeProblem;
+    type: string;
     
     @Column()
     details:string;
     
     @Column()
-    status: StatusIncident;
+    status: string;
     
     @Column()
     createAt:Date;
