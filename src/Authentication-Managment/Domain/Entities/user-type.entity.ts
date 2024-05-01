@@ -5,7 +5,7 @@ import { User } from "./user.entity";
 export class UserType {
 
     @PrimaryGeneratedColumn()
-    UserTypeId:number;
+    TypeId:number;
 
     @Column()
     Name:string;
