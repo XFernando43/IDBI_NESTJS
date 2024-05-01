@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { CustomerModule } from './Authentication-Managment/Infracstruture/customer.module';
 import { AccountModule } from './Authentication-Managment/Infracstruture/account.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { UserTypesModule } from './Authentication-Managment/Infracstruture/user-types.module';
 
 
 @Module({
@@ -20,7 +21,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       logging:true, 
     }),    
     CustomerModule, 
-    AccountModule],
+    AccountModule, UserTypesModule],
   controllers: [AppController],
   providers: [AppService],
 })
