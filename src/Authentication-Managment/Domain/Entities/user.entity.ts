@@ -7,6 +7,13 @@ import { JoinAttribute } from "typeorm/query-builder/JoinAttribute";
 @Entity("Users")
 export class User {
 
+    constructor(name:string, lastName:string, phone:string, userType:UserType){
+        this.name=name;
+        this.lastName=lastName;
+        this.phone=phone;
+        this.userType=userType;
+    }
+
     @PrimaryGeneratedColumn()
     userId:number;
     @Column()
@@ -16,7 +23,7 @@ export class User {
     @Column()
     phone:string;
     @ManyToOne(() => UserType, userType => userType.users)
-    @JoinColumn({name:"TypeId"})
+    @JoinColumn({name:"typeId"})
     userType: UserType;
 
 

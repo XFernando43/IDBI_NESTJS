@@ -8,5 +8,6 @@ import { UserType } from '../Domain/Entities/user-type.entity';
   imports:[TypeOrmModule.forFeature([UserType])],
   controllers: [UserTypesController],
   providers: [UserTypesService],
+  exports:[UserTypesService],
 })
 export class UserTypesModule {}

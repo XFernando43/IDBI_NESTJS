@@ -6,9 +6,13 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   
-  app.useGlobalPipes(
-    new ValidationPipe({whitelist:true, forbidNonWhitelisted:true}),
-  )
+
+  // recordar usar como etiqueta en los controller no en el main da problemas
+  
+   
+  // app.useGlobalPipes(
+  //   new ValidationPipe({whitelist:true, forbidNonWhitelisted:true}),
+  // )
 
   const config = new DocumentBuilder()
     .setTitle('IDBI TECHNICAL TEST')

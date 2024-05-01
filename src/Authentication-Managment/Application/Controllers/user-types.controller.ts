@@ -1,14 +1,16 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserTypesService } from '../Services/user-types.service';
 import { CreateUserTypeDto } from '../../Domain/Dto/create-user-type.dto';
 import { UpdateUserTypeDto } from '../../Domain/Dto/update-user-type.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { Validate } from 'class-validator';
 
 @ApiTags("UserTypes")
 @Controller('user-types')
 export class UserTypesController {
   constructor(private readonly userTypesService: UserTypesService) {}
 
+  @UsePipes(ValidationPipe)
   @Post()
   create(@Body() createUserTypeDto: CreateUserTypeDto) {
     return this.userTypesService.create(createUserTypeDto);
