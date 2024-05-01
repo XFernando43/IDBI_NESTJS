@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateCommentDto } from '../../Domain/Dto/create-comment.dto';
-import { UpdateCommentDto } from '../../Domain/Dto/update-comment.dto';
+import { CreateCommentDto } from '../../Domain/Dto/Comment/create-comment.dto';
+import { UpdateCommentDto } from '../../Domain/Dto/Comment/update-comment.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Comment } from 'src/Incidents-Managment/Domain/Entities/comment.entity';
 import { Repository } from 'typeorm';

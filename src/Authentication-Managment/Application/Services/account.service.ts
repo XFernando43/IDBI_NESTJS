@@ -1,19 +1,21 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateAccountDto } from 'src/Authentication-Managment/Domain/Dto/create-account.dto';
-import { UpdateAccountDto } from 'src/Authentication-Managment/Domain/Dto/update-account.dto';
+import { CreateAccountDto } from 'src/Authentication-Managment/Domain/Dto/Account/create-account.dto';
 import { Account } from 'src/Authentication-Managment/Domain/Entities/account.entity';
 import { Repository } from 'typeorm';
 import { UserService } from './user.service';
-import { hash } from 'bcrypt';
-import { CreateUserDto } from 'src/Authentication-Managment/Domain/Dto/create-user.dto';
+import { hash, compare } from 'bcrypt';
+import { CreateUserDto } from 'src/Authentication-Managment/Domain/Dto/User/create-user.dto';
+import { LogginAccountDto } from 'src/Authentication-Managment/Domain/Dto/Account/loggin-account.dto';
+import { JwtService } from '@nestjs/jwt';
 
 
 
 @Injectable()
 export class AccountService {
   constructor(@InjectRepository(Account) private AccountRepository:Repository<Account>,
-              private UserService:UserService){}
+              private UserService:UserService,
+              private jwtAuthService: JwtService ){}
   async create(createAccountDto: CreateAccountDto) {
     try {
       const accountFinded = await this.AccountRepository.findOne({
@@ -112,6 +114,45 @@ export class AccountService {
       );
     }
   }
+
+  async Login(logginDto:LogginAccountDto){
+    const { email, password } = logginDto;
+    const findAccount = await this.AccountRepository.findOne({where:{email:email}});
+    if(!findAccount){
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          message: 'Email not found',
+        },
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    const checkPassword = await compare(password, findAccount.password);
+
+    if(!checkPassword){
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          message: 'Password Incorrect',
+        },
+        HttpStatus.FORBIDDEN,
+      );
+    }
+
+    const payload = {accountId:findAccount.accountId, email:findAccount.email};
+
+    const token = await this.jwtAuthService.sign(payload);
+
+    const data = {
+      account:findAccount,
+      token: token,
+    }
+
+    return data;
+
+  }
+
 }
 
 

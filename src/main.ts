@@ -1,18 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-   // prueba
-
-  // recordar usar como etiqueta en los controller no en el main da problemas
-  
-   
-  // app.useGlobalPipes(
-  //   new ValidationPipe({whitelist:true, forbidNonWhitelisted:true}),
-  // )
 
   const config = new DocumentBuilder()
     .setTitle('IDBI TECHNICAL TEST')
@@ -26,10 +17,9 @@ async function bootstrap() {
     swaggerOptions:{
       filter:true,
       showRequestDuration:true,
+      multipart:true,
     }
   });
-
-
 
   await app.listen(3000);
 }

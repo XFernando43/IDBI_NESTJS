@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { CommentsService } from '../Service/comments.service';
-import { CreateCommentDto } from '../../Domain/Dto/create-comment.dto';
-import { UpdateCommentDto } from '../../Domain/Dto/update-comment.dto';
+import { CreateCommentDto } from '../../Domain/Dto/Comment/create-comment.dto';
+import { UpdateCommentDto } from '../../Domain/Dto/Comment/update-comment.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags("Comments")

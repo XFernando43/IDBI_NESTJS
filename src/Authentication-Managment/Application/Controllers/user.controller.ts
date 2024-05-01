@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UserService } from '../Services/user.service';
-import { CreateUserDto } from 'src/Authentication-Managment/Domain/Dto/create-user.dto';
-import { UpdateUserDto } from 'src/Authentication-Managment/Domain/Dto/update-user.dto';
+import { CreateUserDto } from 'src/Authentication-Managment/Domain/Dto/User/create-user.dto';
+import { UpdateUserDto } from 'src/Authentication-Managment/Domain/Dto/User/update-user.dto';
 import { ApiTags } from '@nestjs/swagger';
 @ApiTags("User")
 @Controller('user')

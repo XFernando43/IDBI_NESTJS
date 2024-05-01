@@ -5,16 +5,19 @@ export class CreateIncidentDto {
   userId: number;
   @ApiProperty()
   subject: string;
-  @ApiProperty()
-  imageUrl: string;
+    
   @ApiProperty()
   type: string;
   @ApiProperty()
   details: string;
   @ApiProperty()
   status: string;
-//   @ApiProperty()
-//   createAt: Date;
-//   @ApiProperty()
-//   updateAt: Date;
+
+  @ApiProperty()
+  imageUrl: string;
+
+
+  // @ApiProperty({ type: 'string', format: 'binary', description: 'Image file to upload' })
+  // imageUrl: string;
+
 }

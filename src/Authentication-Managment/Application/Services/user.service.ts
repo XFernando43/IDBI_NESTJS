@@ -1,6 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUserDto } from '../../Domain/Dto/create-user.dto';
-import { UpdateUserDto } from '../../Domain/Dto/update-user.dto';
+import { CreateUserDto } from '../../Domain/Dto/User/create-user.dto';
+import { UpdateUserDto } from '../../Domain/Dto/User/update-user.dto';
 import { User } from 'src/Authentication-Managment/Domain/Entities/user.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -68,6 +68,7 @@ export class UserService {
       throw new HttpException('Error retrieving user', HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
+
 
   async update(id: number, updateUserDto: UpdateUserDto) {
     try {
