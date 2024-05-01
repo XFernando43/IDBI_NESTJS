@@ -5,7 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  
+   // prueba
 
   // recordar usar como etiqueta en los controller no en el main da problemas
   
