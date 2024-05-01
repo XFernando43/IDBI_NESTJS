@@ -5,6 +5,8 @@ import { AccountModule } from './Authentication-Managment/Infracstruture/account
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserTypesModule } from './Authentication-Managment/Infracstruture/user-types.module';
 import { UserModule } from './Authentication-Managment/Infracstruture/user.module';
+import { CommentsModule } from './Incidents-Managment/InfraStructure/comments.module';
+import { IncidentModule } from './Incidents-Managment/InfraStructure/incident.module';
 
 
 @Module({
@@ -17,11 +19,16 @@ import { UserModule } from './Authentication-Managment/Infracstruture/user.modul
       password: '123456789',
       database: 'idbi',
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
-      synchronize: true, 
+      synchronize: false, 
       logging:true, 
     }),    
     UserModule, 
-    AccountModule, UserTypesModule],
+    AccountModule,
+    UserTypesModule,
+    CommentsModule,
+    IncidentModule,
+  ],
+
   controllers: [AppController],
   providers: [AppService],
 })
