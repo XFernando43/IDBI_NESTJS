@@ -12,9 +12,6 @@ export class Account {
     @Column()
     Password:string;
 
-    // @OneToOne(()=> User)
-    // @JoinColumn({name:'UserId'})
-    // user:User;
 
     @OneToOne(()=> User)
     @JoinColumn({name:'UserId'})
