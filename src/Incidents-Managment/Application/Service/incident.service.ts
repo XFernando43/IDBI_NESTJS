@@ -6,10 +6,6 @@ import { Incident } from 'src/Incidents-Managment/Domain/Entities/incident.entit
 import { Repository } from 'typeorm';
 import { UserService } from 'src/Authentication-Managment/Application/Services/user.service';
 
-//FIrebase
-import { getStorage, ref, uploadBytes } from "firebase/storage";
-import { initializeApp } from "firebase/app";
-
 // correos
 import { transporter } from 'config/mailer';
 import { FirebaseService } from './firebase.service';
@@ -21,69 +17,79 @@ export class IncidentService {
   constructor(@InjectRepository(Incident) private IncidentRepository:Repository<Incident>
               ,private UserService:UserService,
               private fireBaseService:FirebaseService){}
-  // async create(createIncidentDto: CreateIncidentDto) {
-  //   try{
-  //     const userFinded = await this.UserService.findOne(createIncidentDto.userId);
+  async create(imageFile,createIncidentDto: CreateIncidentDto) {
+    try{
+      const userFinded = await this.UserService.findOne(createIncidentDto.userId);
 
-  //     const dateNow = new Date();
+      if(!userFinded){
+        throw new HttpException(
+          {
+            status: HttpStatus.NOT_FOUND,
+            message: 'User not found',
+          },
+          HttpStatus.NOT_FOUND,
+        );
+      }
 
-  //     if(!userFinded){
-  //       throw new HttpException(
-  //         {
-  //           status: HttpStatus.NOT_FOUND,
-  //           message: 'User not found',
-  //         },
-  //         HttpStatus.NOT_FOUND,
-  //       );
-  //     }
+      const dateNow = new Date();
 
-  //     const newIncidentEntity = 
-  //           new Incident(userFinded,
-  //                       createIncidentDto.subject,
-  //                       createIncidentDto.imageUrl,
-  //                       createIncidentDto.type,
-  //                       createIncidentDto.details,
-  //                       createIncidentDto.status,
-  //                       dateNow,dateNow);
-
-  //     console.log('Imagen recibida:', createIncidentDto.imageUrl);
-
-  //     const newIncidentToDB = await this.IncidentRepository.create(newIncidentEntity);
+      const imgUrl = await this.createimg(imageFile);
       
+      const newIncidentEntity = 
+            new Incident(userFinded,
+                        createIncidentDto.subject,
+                        imgUrl,
+                        createIncidentDto.type,
+                        createIncidentDto.details,
+                        createIncidentDto.status,
+                        dateNow,dateNow);
+
+      const newIncidentToDB = await this.IncidentRepository.create(newIncidentEntity);
+      
+      await transporter.sendMail({
+        from: `${userFinded.name} ${userFinded.lastName}`, 
+        to: "voxel63792@ociun.com", 
+        subject: `${createIncidentDto.subject}`, 
+        text: `${createIncidentDto.type}`, 
+        html: `<b>${createIncidentDto.details}</b>`, 
+      });
+
+      return this.IncidentRepository.save(newIncidentToDB);    
 
 
-  //     await transporter.sendMail({
-  //       from: `${userFinded.name} ${userFinded.lastName}`, 
-  //       to: "voxel63792@ociun.com", 
-  //       subject: `${createIncidentDto.subject}`, 
-  //       text: `${createIncidentDto.type}`, 
-  //       html: `<b>${createIncidentDto.details}</b>`, 
-  //     });
+    }catch(error){
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Error to create a new Incident',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
 
 
 
 
-  //     return this.IncidentRepository.save(newIncidentToDB);
-
-  //   }catch(error){
-  //     throw new HttpException(
-  //       {
-  //         status: HttpStatus.INTERNAL_SERVER_ERROR,
-  //         message: 'Error to create a new Incident',
-  //       },
-  //       HttpStatus.INTERNAL_SERVER_ERROR,
-  //     );
-  //   }
-  // }
 
 
 
 
-  async createimg(imageFile, createIncidentDto: CreateIncidentDto) {
+
+
+
+
+
+
+  
+
+
+  async createimg(imageFile):Promise<string> {
     const storage = this.fireBaseService.getStorageInstance();
     const bucket = storage.bucket();
 
-    const fileUpload = bucket.file(imageFile.originalname)
+    // const fileUpload = bucket.file(imageFile.originalname)
+    const fileUpload = bucket.file(`Indicents/${imageFile.originalname}`)
 
     const stream = fileUpload.createWriteStream({
       metadata: {

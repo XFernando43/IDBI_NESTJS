@@ -28,7 +28,7 @@ export class Incident {
     @Column()
     subject:string;
     
-    @Column()
+    @Column({ type: 'text' })
     imageUrl:string;
     
     @Column()

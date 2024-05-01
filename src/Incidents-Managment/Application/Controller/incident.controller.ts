@@ -15,6 +15,7 @@ import { UpdateIncidentDto } from '../../Domain/Dto/Inicident/update-incident.dt
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { renameImage } from 'src/Incidents-Managment/Helpers/images.helper';
+import { createImgDto } from 'src/Incidents-Managment/Domain/Dto/Inicident/create-img.dto';
 
 
 @ApiTags('Incident')
@@ -22,27 +23,28 @@ import { renameImage } from 'src/Incidents-Managment/Helpers/images.helper';
 export class IncidentController {
   constructor(private readonly incidentService: IncidentService) {}
 
-  // @Post()
-  // @ApiConsumes('multipart/form-data')
-  // @ApiBody({
-  //   description: 'Create new incident',
-  //   type: CreateIncidentDto,
-  // })
-  // @UseInterceptors(FileInterceptor('imageUrl'))
-  // create(@Body() createIncidentDto: CreateIncidentDto) {
-  //   return this.incidentService.create(createIncidentDto);
-  // }
+  @Post()
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Create new incident',
+    type: CreateIncidentDto, 
+
+  })
+  @UseInterceptors(FileInterceptor('imageUrl'))
+  create(@UploadedFile() file, @Body() createIncidentDto: CreateIncidentDto) {
+    return this.incidentService.create(file,createIncidentDto);
+  }
 
   @Post('IMG')
   @ApiConsumes('multipart/form-data')
   @ApiBody({
-    description: 'Create new incident',
-    type: CreateIncidentDto,
+    description: 'submit a image from the incident',
+    type: createImgDto,
   })
   // @UseInterceptors(FileInterceptor('imageUrl', { storage: diskStorage({  destination: './uploads',  filename:renameImage}) }))
   @UseInterceptors(FileInterceptor('imageUrl'))
-  createIMg(@UploadedFile() file, @Body() createIncidentDto: CreateIncidentDto) {
-    return this.incidentService.createimg(file, createIncidentDto);
+  createIMg(@UploadedFile() file) {
+    return this.incidentService.createimg(file);
   }
 
   @Get()
