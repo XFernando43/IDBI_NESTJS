@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { CustomerModule } from './Authentication-Managment/Infracstruture/customer.module';
 import { AccountModule } from './Authentication-Managment/Infracstruture/account.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UserTypesModule } from './Authentication-Managment/Infracstruture/user-types.module';
+import { UserModule } from './Authentication-Managment/Infracstruture/user.module';
 
 
 @Module({
@@ -20,7 +20,7 @@ import { UserTypesModule } from './Authentication-Managment/Infracstruture/user-
       synchronize: true, 
       logging:true, 
     }),    
-    CustomerModule, 
+    UserModule, 
     AccountModule, UserTypesModule],
   controllers: [AppController],
   providers: [AppService],

@@ -1,5 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
-import { Customer } from "./customer.entity";
+import { User } from "./user.entity";
 
 @Entity("Accounts")
 export class Account {
@@ -16,8 +16,8 @@ export class Account {
     // @JoinColumn({name:'UserId'})
     // user:User;
 
-    @OneToOne(()=> Customer)
+    @OneToOne(()=> User)
     @JoinColumn({name:'UserId'})
-    user:Customer;
+    user:User;
 
 }

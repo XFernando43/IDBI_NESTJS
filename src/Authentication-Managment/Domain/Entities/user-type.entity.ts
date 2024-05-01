@@ -1,5 +1,5 @@
 import { Column, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Customer } from "./customer.entity";
+import { User } from "./user.entity";
 
 export class UserType {
 
@@ -12,8 +12,8 @@ export class UserType {
     @Column()
     Description:string;
 
-    @OneToMany(() => Customer, customer => customer.userType)
-    customers: Customer[];
+    @OneToMany(() => User, user => user.userType)
+    users: User[];
     
 
 }
