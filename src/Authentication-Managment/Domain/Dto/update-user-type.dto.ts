@@ -1,4 +1,14 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateUserTypeDto } from './create-user-type.dto';
+import { ApiProperty } from "@nestjs/swagger";
+import { IsNotEmpty, MinLength } from "class-validator";
 
-export class UpdateUserTypeDto extends PartialType(CreateUserTypeDto) {}
+export class UpdateUserTypeDto {
+    @IsNotEmpty({message:"Description don't should be empty"})
+    @ApiProperty()
+    name:string;
+
+    @IsNotEmpty({message:"Description don't should be empty"})
+    @MinLength(5,{message:"Min size is 30 characters"})
+    @ApiProperty()
+    description:string;
+
+}

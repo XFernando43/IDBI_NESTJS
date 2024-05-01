@@ -6,7 +6,7 @@ export class UserType {
 
     @PrimaryGeneratedColumn()
     typeId:number;
-
+    
     @Column()
     name:string;
 
