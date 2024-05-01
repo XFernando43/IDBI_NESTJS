@@ -3,6 +3,13 @@ import { User } from "./user.entity";
 
 @Entity("Accounts")
 export class Account {
+
+    constructor(email:string, password:string, user:User){
+        this.email=email;
+        this.password=password;
+        this.user=user;
+    }
+
     @PrimaryGeneratedColumn()
     accountId:number;
 
