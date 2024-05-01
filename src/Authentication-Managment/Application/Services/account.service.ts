@@ -117,7 +117,11 @@ export class AccountService {
 
   async Login(logginDto:LogginAccountDto){
     const { email, password } = logginDto;
-    const findAccount = await this.AccountRepository.findOne({where:{email:email}});
+    
+    const findAccount = await this.AccountRepository.findOne({
+      where:{email:email}
+    });
+
     if(!findAccount){
       throw new HttpException(
         {

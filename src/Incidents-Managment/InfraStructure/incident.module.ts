@@ -4,9 +4,13 @@ import { IncidentController } from '../Application/Controller/incident.controlle
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Incident } from '../Domain/Entities/incident.entity';
 import { UserModule } from 'src/Authentication-Managment/Infracstruture/user.module';
+import { FirebaseModule } from './firebase.module';
 
 @Module({
-  imports:[TypeOrmModule.forFeature([Incident]), UserModule],
+  imports:[TypeOrmModule.forFeature([Incident]), 
+  UserModule, FirebaseModule
+  
+  ],
   controllers: [IncidentController],
   providers: [IncidentService],
   exports:[IncidentService],

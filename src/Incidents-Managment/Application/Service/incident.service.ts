@@ -6,123 +6,113 @@ import { Incident } from 'src/Incidents-Managment/Domain/Entities/incident.entit
 import { Repository } from 'typeorm';
 import { UserService } from 'src/Authentication-Managment/Application/Services/user.service';
 
+//FIrebase
 import { getStorage, ref, uploadBytes } from "firebase/storage";
 import { initializeApp } from "firebase/app";
 
+// correos
 import { transporter } from 'config/mailer';
-
-// var admin = require("firebase-admin");
-// var serviceAccount = require("../../../../src/keyNestJS.json");
-
-// import { getAnalytics } from "firebase/analytics";
-
-// import * as sharp from 'sharp';
+import { FirebaseService } from './firebase.service';
 
 
 
 @Injectable()
 export class IncidentService {
   constructor(@InjectRepository(Incident) private IncidentRepository:Repository<Incident>
-              ,private UserService:UserService){}
-  async create(createIncidentDto: CreateIncidentDto) {
-    try{
-      const userFinded = await this.UserService.findOne(createIncidentDto.userId);
+              ,private UserService:UserService,
+              private fireBaseService:FirebaseService){}
+  // async create(createIncidentDto: CreateIncidentDto) {
+  //   try{
+  //     const userFinded = await this.UserService.findOne(createIncidentDto.userId);
 
-      const dateNow = new Date();
+  //     const dateNow = new Date();
 
-      if(!userFinded){
-        throw new HttpException(
-          {
-            status: HttpStatus.NOT_FOUND,
-            message: 'User not found',
-          },
-          HttpStatus.NOT_FOUND,
-        );
-      }
+  //     if(!userFinded){
+  //       throw new HttpException(
+  //         {
+  //           status: HttpStatus.NOT_FOUND,
+  //           message: 'User not found',
+  //         },
+  //         HttpStatus.NOT_FOUND,
+  //       );
+  //     }
 
-      const newIncidentEntity = 
-            new Incident(userFinded,
-                        createIncidentDto.subject,
-                        createIncidentDto.imageUrl,
-                        createIncidentDto.type,
-                        createIncidentDto.details,
-                        createIncidentDto.status,
-                        dateNow,dateNow);
+  //     const newIncidentEntity = 
+  //           new Incident(userFinded,
+  //                       createIncidentDto.subject,
+  //                       createIncidentDto.imageUrl,
+  //                       createIncidentDto.type,
+  //                       createIncidentDto.details,
+  //                       createIncidentDto.status,
+  //                       dateNow,dateNow);
 
-      console.log('Imagen recibida:', createIncidentDto.imageUrl);
+  //     console.log('Imagen recibida:', createIncidentDto.imageUrl);
 
-      const newIncidentToDB = await this.IncidentRepository.create(newIncidentEntity);
+  //     const newIncidentToDB = await this.IncidentRepository.create(newIncidentEntity);
       
 
 
-      await transporter.sendMail({
-        from: `${userFinded.name} ${userFinded.lastName}`, 
-        to: "voxel63792@ociun.com", 
-        subject: `${createIncidentDto.subject}`, 
-        text: `${createIncidentDto.type}`, 
-        html: `<b>${createIncidentDto.details}</b>`, 
-      });
+  //     await transporter.sendMail({
+  //       from: `${userFinded.name} ${userFinded.lastName}`, 
+  //       to: "voxel63792@ociun.com", 
+  //       subject: `${createIncidentDto.subject}`, 
+  //       text: `${createIncidentDto.type}`, 
+  //       html: `<b>${createIncidentDto.details}</b>`, 
+  //     });
 
 
 
 
-      return this.IncidentRepository.save(newIncidentToDB);
+  //     return this.IncidentRepository.save(newIncidentToDB);
 
-    }catch(error){
-      throw new HttpException(
-        {
-          status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: 'Error to create a new Incident',
-        },
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
-  }
+  //   }catch(error){
+  //     throw new HttpException(
+  //       {
+  //         status: HttpStatus.INTERNAL_SERVER_ERROR,
+  //         message: 'Error to create a new Incident',
+  //       },
+  //       HttpStatus.INTERNAL_SERVER_ERROR,
+  //     );
+  //   }
+  // }
 
 
 
 
   async createimg(imageFile, createIncidentDto: CreateIncidentDto) {
-    
-      console.log('Imagen recibida:', imageFile);
-  
-     
+    const storage = this.fireBaseService.getStorageInstance();
+    const bucket = storage.bucket();
 
-      const firebaseConfig = {
-        apiKey: "AIzaSyDVn_MVEaXsuv-BudMGe9_RMAoCQB0JsPw",
-        authDomain: "idbi-d3fa7.firebaseapp.com",
-        projectId: "idbi-d3fa7",
-        storageBucket: "idbi-d3fa7.appspot.com",
-        messagingSenderId: "904086420852",
-        appId: "1:904086420852:web:c59ac91ca454121f69c021",
-        measurementId: "G-GDMY8SFDM6"
-      };
+    const fileUpload = bucket.file(imageFile.originalname)
 
-      const app = initializeApp(firebaseConfig);
-      
+    const stream = fileUpload.createWriteStream({
+      metadata: {
+        contentType: imageFile.mimetype
+      }
+    })
 
-      
-
-
-      const storage = getStorage();
-      const storageRef = ref(storage, imageFile.originalname);
-      const metadata = {
-          contentType: imageFile.mimetype,
-      };
-
-      uploadBytes(storageRef, imageFile ,metadata).then((snapshot) => {
-        console.log(imageFile);
+    return new Promise((resolve, reject) => {
+      stream.on('error', (error) => {
+        reject(error);
       });
 
-      try {
-        const snapshot = await uploadBytes(storageRef, imageFile, metadata);
-        console.log('Archivo subido a Firebase:', imageFile.originalname);
-        return snapshot;
-    } catch (error) {
-        console.error('Error al subir archivo a Firebase:', error);
-        throw error;
-    }
- 
+      stream.on('finish', async () => {
+        try {
+          const [url] = await fileUpload.getSignedUrl({
+            action: 'read',
+            expires: '01-01-3000',
+          });
+
+          resolve(url);
+        } catch (error) {
+          reject(error);
+        }
+      });
+
+      stream.end(imageFile.buffer)
+
+    });
+
   }
 
 

@@ -13,11 +13,11 @@ export class CreateIncidentDto {
   @ApiProperty()
   status: string;
 
-  @ApiProperty()
-  imageUrl: string;
-
-
-  // @ApiProperty({ type: 'string', format: 'binary', description: 'Image file to upload' })
+  // @ApiProperty()
   // imageUrl: string;
+
+
+  @ApiProperty({ type: 'string', format: 'binary', description: 'Image file to upload' })
+  imageUrl: string;
 
 }

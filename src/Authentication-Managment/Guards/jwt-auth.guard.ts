@@ -5,7 +5,7 @@ import { JwtService } from '@nestjs/jwt';
 export class JwtAuthGuard implements CanActivate {
   constructor(private jwtService: JwtService) {}
 
-  canActivate(context: ExecutionContext): boolean {
+  canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
     const token = request.headers.authorization?.split(' ')[1]; 
 
