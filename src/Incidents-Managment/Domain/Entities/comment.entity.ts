@@ -4,6 +4,14 @@ import { Incident } from "./incident.entity";
 
 @Entity("Comments")
 export class Comment {
+
+    constructor(incident:Incident, user:User, content:string, date:Date){
+        this.incident = incident;
+        this.user = user;
+        this.content = content;
+        this.createdAt = date;
+    }
+
     @PrimaryGeneratedColumn()
     commentId:number;
     
@@ -18,6 +26,6 @@ export class Comment {
     @Column()
     content:string;
 
-    @JoinColumn()
+    @Column()
     createdAt: Date;
 }

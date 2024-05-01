@@ -2,7 +2,9 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { CommentsService } from '../Service/comments.service';
 import { CreateCommentDto } from '../../Domain/Dto/create-comment.dto';
 import { UpdateCommentDto } from '../../Domain/Dto/update-comment.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags("Comments")
 @Controller('comments')
 export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
@@ -20,6 +22,11 @@ export class CommentsController {
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.commentsService.findOne(+id);
+  }
+
+  @Get('obtenerPorIncidentes/:id')
+  commetsByIncidetID(@Param('id') id: string) {
+    return this.commentsService.GetCommentsbyIncidentId(+id);
   }
 
   @Patch(':id')

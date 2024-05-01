@@ -9,5 +9,6 @@ import { UserModule } from 'src/Authentication-Managment/Infracstruture/user.mod
   imports:[TypeOrmModule.forFeature([Incident]), UserModule],
   controllers: [IncidentController],
   providers: [IncidentService],
+  exports:[IncidentService],
 })
 export class IncidentModule {}
