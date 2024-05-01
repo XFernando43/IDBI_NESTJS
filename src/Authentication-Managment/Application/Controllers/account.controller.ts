@@ -1,9 +1,11 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
 import { CreateAccountDto } from 'src/Authentication-Managment/Domain/Dto/Account/create-account.dto';
 import { AccountService } from '../Services/account.service';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { LogginAccountDto } from 'src/Authentication-Managment/Domain/Dto/Account/loggin-account.dto';
+import { JwtAuthGuard } from 'src/Authentication-Managment/Guards/jwt-auth.guard';
 
+@ApiBearerAuth()
 @ApiTags("Account")
 @Controller('account')
 export class AccountController {
@@ -15,6 +17,7 @@ export class AccountController {
   }
 
   @Get()
+  @UseGuards(JwtAuthGuard)
   findAll() {
     return this.accountService.findAll();
   }
