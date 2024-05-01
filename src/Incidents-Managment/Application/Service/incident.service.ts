@@ -51,19 +51,105 @@ export class IncidentService {
     }
   }
 
-  findAll() {
-    return `This action returns all incident`;
+  async findAll() {
+    try{
+      const Incidents = await this.IncidentRepository.find();
+      if(!Incidents || Incidents.length <= 0){
+        throw new HttpException(
+          {
+            status: HttpStatus.OK,
+            message: 'Not Incidents in dataBase Alredy',
+            data:Incidents
+          },
+          HttpStatus.OK,
+        );
+      }
+
+      return Incidents;
+
+    }catch(error){
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Error to get All Incidents',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} incident`;
+  async findOne(id: number) {
+    try {
+      const incident = await this.IncidentRepository.findOne({where:{incidentId:id}});
+      if (!incident) {
+        throw new HttpException(
+          {
+            status: HttpStatus.NOT_FOUND,
+            message: 'Not incident Found',
+          },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      return incident;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Error retrieving incident',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  update(id: number, updateIncidentDto: UpdateIncidentDto) {
-    return `This action updates a #${id} incident`;
+  async update(id: number, updateIncidentDto: UpdateIncidentDto) {
+    try {
+      const incident = await this.IncidentRepository.findOne({where:{incidentId:id}});
+      if (!incident) {
+        throw new HttpException(
+          {
+            status: HttpStatus.NOT_FOUND,
+            message: 'Not incident Found',
+          },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+
+      this.IncidentRepository.merge(incident, updateIncidentDto);
+      return await this.IncidentRepository.save(incident);
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Error updating incident',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} incident`;
+  async remove(id: number) {
+    try {
+      const incident = await this.IncidentRepository.findOne({where:{incidentId:id}});
+      if (!incident) {
+        throw new HttpException(
+          {
+            status: HttpStatus.NOT_FOUND,
+            message: 'Not incident Found',
+          },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      await this.IncidentRepository.remove(incident);
+      return { message: `Incident with ID ${id} deleted successfully` };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Error deleting incident',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
