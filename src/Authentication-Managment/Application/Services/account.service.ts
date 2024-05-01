@@ -50,20 +50,67 @@ export class AccountService {
     }
   }
 
-  findAll() {
-    return `This action returns all account`;
+  async findAll() {
+    try {
+      return await this.AccountRepository.find();
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.CONFLICT,
+          message: 'Error to create this Account',
+        },
+        HttpStatus.CONFLICT,
+      );
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} account`;
+  async findOne(id: number) {
+    try {
+      const account = await this.AccountRepository.findOne({where:{accountId:id}});
+      if (!account) {
+        throw new HttpException(
+          {
+            status: HttpStatus.NOT_FOUND,
+            message: 'Error to find this Account',
+          },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      return account;
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Error to create this Account',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
-  update(id: number, updateAccountDto: UpdateAccountDto) {
-    return `This action updates a #${id} account`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} account`;
+  async remove(id: number) {
+    try {
+      const account = await this.AccountRepository.findOne({where:{accountId:id}});
+      if (!account) {
+        throw new HttpException(
+          {
+            status: HttpStatus.NOT_FOUND,
+            message: 'Error to find this Account to delete',
+          },
+          HttpStatus.NOT_FOUND,
+        );
+      }
+      await this.AccountRepository.remove(account);
+      return { message: `Account with ID ${id} deleted successfully` };
+    } catch (error) {
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Error to create this Account',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }
 
