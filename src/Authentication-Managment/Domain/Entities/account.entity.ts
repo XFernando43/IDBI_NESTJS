@@ -1,4 +1,5 @@
 import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Customer } from "./customer.entity";
 
 @Entity("Accounts")
 export class Account {
@@ -6,13 +7,17 @@ export class Account {
     AccountId:number;
 
     @Column()
-    email:string;
+    Email:string;
 
     @Column()
-    password:string;
+    Password:string;
 
     // @OneToOne(()=> User)
     // @JoinColumn({name:'UserId'})
     // user:User;
+
+    @OneToOne(()=> Customer)
+    @JoinColumn({name:'UserId'})
+    user:Customer;
 
 }
