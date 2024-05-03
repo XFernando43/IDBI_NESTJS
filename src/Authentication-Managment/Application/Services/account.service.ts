@@ -145,7 +145,7 @@ export class AccountService {
       );
     }
 
-    const payload = {accountId:findAccount.accountId, email:findAccount.email};
+    const payload = {accountId:findAccount.accountId, email:findAccount.email, type:findAccount.user.userType.name};
 
     const token = await this.jwtAuthService.sign(payload);
 
@@ -159,27 +159,3 @@ export class AccountService {
   }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

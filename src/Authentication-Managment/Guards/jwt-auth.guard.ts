@@ -9,18 +9,28 @@ export class JwtAuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = request.headers.authorization?.split(' ')[1]; 
 
-    if (!token) {
-        throw new UnauthorizedException();
-    }
-
     console.log(token);
+
+    if (!token) {
+        throw new UnauthorizedException('Token not found');
+    }
 
     try {
       const decoded = this.jwtService.verify(token); 
       request.user = decoded; 
+
+      console.log(request.user);
+      console.log("-->",decoded);
+
+      // Aquí se verifica si el usuario tiene al menos uno de los tipos permitidos
+      // const userType: string = decoded.type || '';
+      // if (!this.allowedTypes.includes(userType)) {
+      //   throw new UnauthorizedException('You do not have permission to access this resource');
+      // }
+
       return true; 
     } catch (err) {
-      return false;
+      throw new UnauthorizedException('Invalid token');
     }
   }
 }
