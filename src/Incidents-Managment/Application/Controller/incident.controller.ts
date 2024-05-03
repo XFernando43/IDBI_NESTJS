@@ -51,18 +51,20 @@ export class IncidentController {
   }
 
   @Get()
-  @Roles(Role.Admin, Role.User)
+  @Roles(Role.Admin,Role.Staff, Role.User)
   @UseGuards(RolesGuard)
   findAll() {
     return this.incidentService.findAll();
   }
-
-  @Get(':id')
-  @Roles(Role.Admin, Role.User)
+  
+  @Get('getIncident/:id')
+  @Roles(Role.Admin,Role.Staff, Role.User)
   @UseGuards(RolesGuard)
   findOne(@Param('id') id: string) {
     return this.incidentService.findOne(+id);
   }
+
+  
   @Get('GetIncidentById/:userId')
   @Roles(Role.Admin, Role.User)
   @UseGuards(RolesGuard)
