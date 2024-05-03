@@ -120,7 +120,7 @@ export class AccountService {
     
     const findAccount = await this.AccountRepository.findOne({
       where:{email:email},
-      relations:["user"]
+      relations:["user","user.userType"]
     });
 
     if(!findAccount){

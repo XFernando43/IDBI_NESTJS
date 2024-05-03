@@ -46,15 +46,16 @@ export class UserService {
   }
 
   async findAll() {
-    try {
-      const users = await this.UserRepository.find({ relations: ["usertype"] });
-      if(!users || users.length === 0){
-        throw new HttpException({status: HttpStatus.NOT_FOUND, message: 'Not users already' },HttpStatus.NOT_FOUND,);
-      }
+    // try {
+      const users = await this.UserRepository.find({relations:["userType"]});
+      // console.log(users);
+      // if(!users || users.length === 0){
+      //   throw new HttpException({status: HttpStatus.NOT_FOUND, message: 'Not users already' },HttpStatus.NOT_FOUND,);
+      // }
       return users;
-    } catch (error) {
-      throw new HttpException({status: HttpStatus.CONFLICT,message: 'Error to searching users',},HttpStatus.CONFLICT,);
-    }
+    // } catch (error) {
+    //   throw new HttpException({status: HttpStatus.CONFLICT,message: 'Error to searching users',},HttpStatus.CONFLICT,);
+    // }
   }
 
   async findOne(id: number) {
