@@ -13,7 +13,7 @@ export class CreateIncidentDto {
   @ApiProperty()
   status: string;
 
-  @ApiProperty()
+  // @ApiProperty()
   imageUrlText: string;
 
 

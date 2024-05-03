@@ -56,6 +56,10 @@ export class IncidentController {
   findOne(@Param('id') id: string) {
     return this.incidentService.findOne(+id);
   }
+  @Get('GetIncidentById/:userId')
+  findIncidentsByUser(@Param('userId') id: string) {
+    return this.incidentService.findIncidebntByUser(+id);
+  }
 
   @Patch(':id')
   update(

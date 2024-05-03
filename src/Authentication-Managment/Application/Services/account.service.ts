@@ -54,7 +54,7 @@ export class AccountService {
 
   async findAll() {
     try {
-      return await this.AccountRepository.find();
+      return await this.AccountRepository.find({ relations: ["user"] });
     } catch (error) {
       throw new HttpException(
         {
@@ -83,7 +83,7 @@ export class AccountService {
       throw new HttpException(
         {
           status: HttpStatus.INTERNAL_SERVER_ERROR,
-          message: 'Error to create this Account',
+          message: 'Error',
         },
         HttpStatus.INTERNAL_SERVER_ERROR,
       );
@@ -119,7 +119,8 @@ export class AccountService {
     const { email, password } = logginDto;
     
     const findAccount = await this.AccountRepository.findOne({
-      where:{email:email}
+      where:{email:email},
+      relations:["user"]
     });
 
     if(!findAccount){

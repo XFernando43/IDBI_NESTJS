@@ -47,7 +47,7 @@ export class UserService {
 
   async findAll() {
     try {
-      const users = await this.UserRepository.find();
+      const users = await this.UserRepository.find({ relations: ["usertype"] });
       if(!users || users.length === 0){
         throw new HttpException({status: HttpStatus.NOT_FOUND, message: 'Not users already' },HttpStatus.NOT_FOUND,);
       }

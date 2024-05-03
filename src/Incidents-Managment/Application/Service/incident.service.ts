@@ -69,21 +69,6 @@ export class IncidentService {
   }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-
   async createimg(imageFile):Promise<string> {
     const storage = this.fireBaseService.getStorageInstance();
     const bucket = storage.bucket();
@@ -124,7 +109,9 @@ export class IncidentService {
 
   async findAll() {
     try{
-      const Incidents = await this.IncidentRepository.find();
+      // const Incidents = await this.IncidentRepository.find();
+      const Incidents = await this.IncidentRepository.find({ relations: ['user']});
+
       if(!Incidents || Incidents.length <= 0){
         throw new HttpException(
           {
@@ -135,9 +122,7 @@ export class IncidentService {
           HttpStatus.OK,
         );
       }
-
       return Incidents;
-
     }catch(error){
       throw new HttpException(
         {
@@ -149,9 +134,40 @@ export class IncidentService {
     }
   }
 
+  async findIncidebntByUser(userId:number) {
+    try{
+      const Incidents = await this.IncidentRepository.find({where:{
+        user:{userId:userId}
+      }});
+
+      if(!Incidents || Incidents.length <= 0){
+        throw new HttpException(
+          {
+            status: HttpStatus.OK,
+            message: 'Este usuario no presenta incidentes',
+            data:Incidents
+          },
+          HttpStatus.OK,
+        );
+      }
+      return Incidents;
+    }catch(error){
+      throw new HttpException(
+        {
+          status: HttpStatus.INTERNAL_SERVER_ERROR,
+          message: 'Error to get All Incidents',
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
+  }
+
+
+
+
   async findOne(id: number) {
     try {
-      const incident = await this.IncidentRepository.findOne({where:{incidentId:id}});
+      const incident = await this.IncidentRepository.findOne({where:{incidentId:id},relations: ['user']});
       if (!incident) {
         throw new HttpException(
           {
