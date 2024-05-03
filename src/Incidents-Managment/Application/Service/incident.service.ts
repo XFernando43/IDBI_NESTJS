@@ -67,8 +67,6 @@ export class IncidentService {
       );
     }
   }
-
-
   async createimg(imageFile):Promise<string> {
     const storage = this.fireBaseService.getStorageInstance();
     const bucket = storage.bucket();
@@ -106,7 +104,6 @@ export class IncidentService {
 
   }
 
-
   async findAll() {
     try{
       // const Incidents = await this.IncidentRepository.find();
@@ -136,9 +133,7 @@ export class IncidentService {
 
   async findIncidebntByUser(userId:number) {
     try{
-      const Incidents = await this.IncidentRepository.find({where:{
-        user:{userId:userId}
-      }});
+      const Incidents = await this.IncidentRepository.find({where:{user:{userId:userId}},relations: ['user']});
 
       if(!Incidents || Incidents.length <= 0){
         throw new HttpException(
@@ -167,7 +162,7 @@ export class IncidentService {
 
   async findOne(id: number) {
     try {
-      const incident = await this.IncidentRepository.findOne({where:{incidentId:id},relations: ['user']});
+      const incident = await this.IncidentRepository.findOne({where:{incidentId:id},relations: ['user','user.userType']});
       if (!incident) {
         throw new HttpException(
           {

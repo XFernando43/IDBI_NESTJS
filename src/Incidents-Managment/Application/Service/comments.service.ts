@@ -158,7 +158,8 @@ export class CommentsService {
       const comments = await this.CommentRepository.find({
         where:{
           incident:incidentDB,
-        }
+        },
+        relations:['user']
       });
 
 
