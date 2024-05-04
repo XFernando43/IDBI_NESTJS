@@ -15,7 +15,6 @@ import { CreateIncidentDto } from '../../Domain/Dto/Inicident/create-incident.dt
 import { UpdateIncidentDto } from '../../Domain/Dto/Inicident/update-incident.dto';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { renameImage } from 'src/Incidents-Managment/Helpers/images.helper';
 import { createImgDto } from 'src/Incidents-Managment/Domain/Dto/Inicident/create-img.dto';
 import { Roles } from 'src/Authentication-Managment/Decorator/role.decorator';
 import { Role } from 'src/Authentication-Managment/Domain/enum/roles.enum';
@@ -29,6 +28,8 @@ export class IncidentController {
 
   @Post()
   @ApiConsumes('multipart/form-data')
+  @Roles(Role.Staff, Role.User)
+  @UseGuards(RolesGuard)
   @ApiBody({
     description: 'Create new incident',
     type: CreateIncidentDto,
@@ -51,29 +52,29 @@ export class IncidentController {
   }
 
   @Get()
-  @Roles(Role.Admin,Role.Staff, Role.User)
+  @Roles(Role.Staff, Role.User)
   @UseGuards(RolesGuard)
   findAll() {
     return this.incidentService.findAll();
   }
   
   @Get('getIncident/:id')
-  @Roles(Role.Admin,Role.Staff, Role.User)
+  @Roles(Role.Staff, Role.User)
   @UseGuards(RolesGuard)
   findOne(@Param('id') id: string) {
     return this.incidentService.findOne(+id);
   }
 
   
-  @Get('GetIncidentById/:userId')
-  @Roles(Role.Admin, Role.User)
+  @Get('GetIncidentsByuserId/:userId')
+  @Roles(Role.User,Role.Staff)
   @UseGuards(RolesGuard)
   findIncidentsByUser(@Param('userId') id: string) {
     return this.incidentService.findIncidebntByUser(+id);
   }
 
   @Patch(':id')
-  @Roles(Role.Admin, Role.User)
+  @Roles(Role.Staff, Role.User)
   @UseGuards(RolesGuard)
   update(
     @Param('id') id: string,
@@ -83,7 +84,7 @@ export class IncidentController {
   }
 
   @Delete(':id')
-  @Roles(Role.Admin, Role.User)
+  @Roles(Role.Staff, Role.User)
   @UseGuards(RolesGuard)
   remove(@Param('id') id: string) {
     return this.incidentService.remove(+id);

@@ -13,42 +13,42 @@ export class CommentsController {
   constructor(private readonly commentsService: CommentsService) {}
 
   @Post()
-  @Roles(Role.Admin,Role.Staff, Role.User)
+  @Roles(Role.Staff, Role.User)
   @UseGuards(RolesGuard)
   create(@Body() createCommentDto: CreateCommentDto) {
     return this.commentsService.create(createCommentDto);
   }
 
   @Get()
-  @Roles(Role.Admin,Role.Staff, Role.User)
+  @Roles(Role.Staff, Role.User)
   @UseGuards(RolesGuard)
   findAll() {
     return this.commentsService.findAll();
   }
 
   @Get(':id')
-  @Roles(Role.Admin,Role.Staff, Role.User)
+  @Roles(Role.Staff, Role.User)
   @UseGuards(RolesGuard)
   findOne(@Param('id') id: string) {
     return this.commentsService.findOne(+id);
   }
 
   @Get('obtenerPorIncidentes/:id')
-  @Roles(Role.Admin,Role.Staff, Role.User)
+  @Roles(Role.Staff, Role.User)
   @UseGuards(RolesGuard)
   commetsByIncidetID(@Param('id') id: string) {
     return this.commentsService.GetCommentsbyIncidentId(+id);
   }
 
   @Patch(':id')
-  @Roles(Role.Admin,Role.Staff, Role.User)
+  @Roles(Role.Staff, Role.User)
   @UseGuards(RolesGuard)
   update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
     return this.commentsService.update(+id, updateCommentDto);
   }
 
   @Delete(':id')
-  @Roles(Role.Admin,Role.Staff, Role.User)
+  @Roles(Role.Staff, Role.User)
   @UseGuards(RolesGuard)
   remove(@Param('id') id: string) {
     return this.commentsService.remove(+id);

@@ -14,28 +14,26 @@ export class AccountController {
   constructor(private readonly accountService: AccountService) {}
 
   @Post("/register")
-  // @Roles(Role.User)
-  // @UseGuards(RolesGuard)
   create(@Body() createAccountDto: CreateAccountDto) {
     return this.accountService.create(createAccountDto);
   }
 
   @Get()
-  @Roles(Role.Admin, Role.User)
+  @Roles(Role.Staff, Role.User)
   @UseGuards(RolesGuard)
   findAll() {
     return this.accountService.findAll();
   }
 
   @Get(':id')
-  @Roles(Role.User)
+  @Roles(Role.User,Role.Staff)
   @UseGuards(RolesGuard)
   findOne(@Param('id') id: string) {
     return this.accountService.findOne(+id);
   }
 
   @Delete(':id')
-  @Roles(Role.User)
+  @Roles(Role.User, Role.Staff)
   @UseGuards(RolesGuard)
   remove(@Param('id') id: string) {
     return this.accountService.remove(+id);
